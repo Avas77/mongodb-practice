@@ -16,6 +16,12 @@ app.post("/user", (req, res) => {
     .catch((err) => res.status(400).send(err));
 });
 
+app.get("/user", (req, res) => {
+  User.find({})
+    .then((users) => res.send(users))
+    .catch((e) => res.status(500).send(e));
+});
+
 app.post("/tasks", (req, res) => {
   const tasks = new Tasks(req.body);
   console.log({ tasks });
