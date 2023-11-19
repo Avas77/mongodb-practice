@@ -89,4 +89,21 @@ app.get("/tasks/:id", async (req, res) => {
   }
 });
 
+app.patch("/tasks/:id", async (req, res) => {
+  const _id = req.params.id;
+  const payload = req.body;
+  try {
+    const task = await Tasks.findByIdAndUpdate(_id, payload, {
+      new: true,
+      runValidators: true,
+    });
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    res.send(task);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 app.listen(PORT, () => console.log("App listening at PORT 3000"));
