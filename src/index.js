@@ -57,6 +57,19 @@ app.patch("/user/:id", async (req, res) => {
   }
 });
 
+app.delete("/user/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const user = await User.findByIdAndDelete(_id);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    res.send(user);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 app.post("/tasks", async (req, res) => {
   const tasks = new Tasks(req.body);
   try {
@@ -86,6 +99,36 @@ app.get("/tasks/:id", async (req, res) => {
     res.send(task);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+app.patch("/tasks/:id", async (req, res) => {
+  const _id = req.params.id;
+  const payload = req.body;
+  try {
+    const task = await Tasks.findByIdAndUpdate(_id, payload, {
+      new: true,
+      runValidators: true,
+    });
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    res.send(task);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+app.delete("/tasks/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const task = await Tasks.findByIdAndDelete(_id);
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+    res.send(task);
+  } catch (error) {
+    res.status(400).send(error);
   }
 });
 
