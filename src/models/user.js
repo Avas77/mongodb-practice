@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     validate(value) {
       if (!validator.isEmail(value)) {
@@ -32,6 +33,24 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// find credentials in database
+userSchema.static(
+  "findByCredentials",
+  async function findByCredentials(email, password) {
+    const user = await User.findOne({ email }).exec();
+    console.log(user);
+    if (!user) {
+      throw new Error("Unable to login");
+    }
+    const isMatch = bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Unable to login");
+    }
+    return user;
+  }
+);
+
+// Hashed passwords
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
