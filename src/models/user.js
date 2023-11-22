@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -31,6 +32,12 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
+});
+
+userSchema.method("generateAuthToken", async function generateAuthToken() {
+  const user = this;
+  const token = jwt.sign({ _id: user._id }, "test");
+  return token;
 });
 
 // find credentials in database
