@@ -32,11 +32,21 @@ const userSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 userSchema.method("generateAuthToken", async function generateAuthToken() {
   const user = this;
   const token = jwt.sign({ _id: user._id }, "test");
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
   return token;
 });
 
