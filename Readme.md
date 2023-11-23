@@ -5,3 +5,5 @@
 # Current Tech Stack: Node.js, Express.js, MongoDB, Mongoose
 
 # db folder contains mongoose connection to mongoDB database
+
+# This project will be completed soon
