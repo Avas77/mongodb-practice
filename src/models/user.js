@@ -50,6 +50,14 @@ userSchema.method("generateAuthToken", async function generateAuthToken() {
   return token;
 });
 
+userSchema.method("toJSON", function () {
+  const user = this;
+  const userObject = user.toObject();
+  delete userObject.password;
+  delete userObject.tokens;
+  return userObject;
+});
+
 // find credentials in database
 userSchema.static(
   "findByCredentials",
