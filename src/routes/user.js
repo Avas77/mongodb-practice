@@ -31,31 +31,22 @@ router.get("/user/:id", async (req, res) => {
   }
 });
 
-router.patch("/user/:id", async (req, res) => {
-  const _id = req.params.id;
+router.patch("/user/me", auth, async (req, res) => {
   const payload = req.body;
   const updates = Object.keys(payload);
   try {
-    const user = await User.findById(_id);
-    updates.forEach((update) => (user[update] = payload[update]));
-    await user.save();
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    res.send(user);
+    updates.forEach((update) => (req.user[update] = payload[update]));
+    await req.user.save();
+    res.send(req.user);
   } catch (error) {
     res.status(400).send(error);
   }
 });
 
-router.delete("/user/:id", async (req, res) => {
-  const _id = req.params.id;
+router.delete("/user/me", auth, async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(_id);
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-    res.send(user);
+    await req.user.deleteOne({});
+    res.send(req.user);
   } catch (error) {
     res.status(400).send(error);
   }
