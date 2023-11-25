@@ -13,6 +13,7 @@ const Tasks = mongoose.model("Tasks", {
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: "User",
   },
 });
 
