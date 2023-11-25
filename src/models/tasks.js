@@ -10,6 +10,10 @@ const Tasks = mongoose.model("Tasks", {
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
 });
 
 module.exports = Tasks;
