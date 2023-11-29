@@ -3,6 +3,7 @@ const User = require("../models/user");
 const auth = require("../middleware/auth");
 const router = new express.Router();
 
+//Create a user
 router.post("/user", async (req, res) => {
   const user = new User(req.body);
   try {
@@ -14,10 +15,12 @@ router.post("/user", async (req, res) => {
   }
 });
 
+// Get Current logged in User
 router.get("/user", auth, async (req, res) => {
   res.send(req.user);
 });
 
+// Get User By Id
 router.get("/user/:id", async (req, res) => {
   const _id = req.params.id;
   try {
@@ -31,6 +34,7 @@ router.get("/user/:id", async (req, res) => {
   }
 });
 
+//Update details about current looged in user
 router.patch("/user/me", auth, async (req, res) => {
   const payload = req.body;
   const updates = Object.keys(payload);
@@ -43,6 +47,7 @@ router.patch("/user/me", auth, async (req, res) => {
   }
 });
 
+// delete current logged in user
 router.delete("/user/me", auth, async (req, res) => {
   try {
     await req.user.deleteOne({});
@@ -52,22 +57,26 @@ router.delete("/user/me", auth, async (req, res) => {
   }
 });
 
+// user login
 router.post("/users/login", async (req, res) => {
   try {
     const user = await User.findByCredentials(
+      // find user in db
       req.body.email,
       req.body.password
     );
-    const token = await user.generateAuthToken();
+    const token = await user.generateAuthToken(); //generate new token for user login
     res.send({ user, token });
   } catch (error) {
     res.status(400).send();
   }
 });
 
+//user logout
 router.post("/users/logout", auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter(
+      //remove the token of the currently logged in user
       (token) => token.token !== req.token
     );
     await req.user.save();

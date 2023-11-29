@@ -43,12 +43,14 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
+// This is a virtual field in the users table for storing the task created by the user
 userSchema.virtual("tasks", {
   ref: "Tasks",
   localField: "_id",
   foreignField: "owner",
 });
 
+// added a custom function to generate user token and save the token to database
 userSchema.method("generateAuthToken", async function generateAuthToken() {
   const user = this;
   const token = jwt.sign({ _id: user._id }, "test");
