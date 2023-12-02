@@ -4,44 +4,49 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Tasks = require("./tasks");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Email is invalid");
-      }
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6,
-    trim: true,
-    validate(value) {
-      if (value.includes("password")) {
-        throw new Error("Password cannot be passowrd");
-      }
-    },
-  },
-  age: {
-    type: Number,
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Email is invalid");
+        }
       },
     },
-  ],
-});
+    password: {
+      type: String,
+      required: true,
+      minlength: 6,
+      trim: true,
+      validate(value) {
+        if (value.includes("password")) {
+          throw new Error("Password cannot be passowrd");
+        }
+      },
+    },
+    age: {
+      type: Number,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  } 
+);
 
 // This is a virtual field in the users table for storing the task created by the user
 userSchema.virtual("tasks", {
