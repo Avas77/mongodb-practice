@@ -6,6 +6,9 @@ const router = new express.Router();
 
 const upload = multer({
   dest: "images",
+  limits: {
+    fileSize: 1000000,
+  },
 });
 
 //Create a user
