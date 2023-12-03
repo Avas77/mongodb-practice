@@ -9,6 +9,12 @@ const upload = multer({
   limits: {
     fileSize: 1000000,
   },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|png|jpeg)$/)) {
+      return cb(new Error("Please upload an image"));
+    }
+    cb(undefined, true);
+  },
 });
 
 //Create a user
