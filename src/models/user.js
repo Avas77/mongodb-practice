@@ -42,10 +42,13 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    avatar: {
+      type: Buffer,
+    },
   },
   {
     timestamps: true,
-  } 
+  }
 );
 
 // This is a virtual field in the users table for storing the task created by the user

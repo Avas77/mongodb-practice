@@ -102,6 +102,7 @@ router.post("/users/logout", auth, async (req, res) => {
 
 router.post(
   "/users/me/avatar",
+  auth,
   upload.single("avatar"),
   (req, res) => {
     res.send();
